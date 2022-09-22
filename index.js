@@ -49,7 +49,11 @@ function speak(text) {
   const synth = window.speechSynthesis;
   
   const utterThis = new SpeechSynthesisUtterance(text);
-  utterThis.voice = synth.getVoices().find(x => x.lang === 'en-scotland')
+
+  // Pick a random english speaking voice
+  const voices = synth.getVoices().filter(x => x.lang.startsWith('en-'))
+  utterThis.voice = voices[Math.floor(Math.random()*voices.length)]
+
   synth.speak(utterThis);
 }
 
