@@ -57,6 +57,12 @@ function speak(text) {
   synth.speak(utterThis);
 }
 
+let text
+
+function triggerSpeech() {
+  speak(text)
+}
+
 (async function() {
   const {coords: {latitude, longitude}} = await getCurrentPosition()
   const locations = await findPagesNear(latitude, longitude)
@@ -64,16 +70,17 @@ function speak(text) {
     console.log('No items')
   }
   for (const location of locations) {
-    const text = await getPageText(location.pageid)
+    text = await getPageText(location.pageid)
     const dl = document.createElement('dl')
     const dt = document.createElement('dt')
     dt.textContent = location.title
     const dd = document.createElement('dd')
     dd.textContent = text
     dl.append(dt, dd)
-  
-    speak(text)
-  
+    
     document.body.append(dl)
+
+    document.querySelector('button').click()
   }
 })()
+
