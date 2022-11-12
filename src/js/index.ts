@@ -1,4 +1,4 @@
-function getCurrentPosition() {
+function getCurrentPosition(): Promise<{coords: {latitude: number, longitude: number}}> {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, {
       enableHighAccuracy: false,
@@ -8,15 +8,15 @@ function getCurrentPosition() {
   })
 }
 
-async function findPagesNear(latitude, longitude) {
+async function findPagesNear(latitude: number, longitude: number) {
   const url = new URL('https://en.wikipedia.org/w/api.php')
   url.search = new URLSearchParams({
     action: 'query',
     list: 'geosearch',
     origin: '*',
     gscoord: `${latitude}|${longitude}`,
-    gsradius: 10000,
-    gslimit: 1,
+    gsradius: '10000',
+    gslimit: '1',
     format: 'json'
   }).toString()
 
@@ -27,13 +27,13 @@ async function findPagesNear(latitude, longitude) {
   return json.query.geosearch
 }
 
-async function getPageText(pageid) {
+async function getPageText(pageid: string) {
   const url = new URL('https://en.wikipedia.org/w/api.php')
   url.search = new URLSearchParams({
     action: 'query',
     prop: 'extracts',
-    exintro: true,
-    explaintext: true,
+    exintro: 'true',
+    explaintext: 'true',
     pageids: pageid,
     origin: '*',
     format: 'json'
@@ -45,7 +45,7 @@ async function getPageText(pageid) {
   return json.query.pages[pageid].extract
 }
 
-function speak(text) {
+function speak(text: string) {
   const synth = window.speechSynthesis;
   
   const utterThis = new SpeechSynthesisUtterance(text);
@@ -57,7 +57,7 @@ function speak(text) {
   synth.speak(utterThis);
 }
 
-let text
+let text: string
 
 function triggerSpeech() {
   speak(text)
@@ -79,8 +79,5 @@ function triggerSpeech() {
     dl.append(dt, dd)
     
     document.body.append(dl)
-
-    document.querySelector('button').click()
   }
 })()
-
