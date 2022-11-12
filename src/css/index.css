@@ -4,3 +4,7 @@
 dd {
   max-inline-size: unset;
 }
+
+body {
+  padding: var(--size-3);
+}
