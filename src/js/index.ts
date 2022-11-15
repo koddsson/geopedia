@@ -1,3 +1,13 @@
+import {Database} from './db.ts'
+import {ready, html} from './utils.ts'
+
+interface Location {
+  title: string
+  pageid: string
+}
+
+const db = new Database<Location>('locations')
+
 function getCurrentPosition(): Promise<{coords: {latitude: number, longitude: number}}> {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, {
@@ -8,7 +18,7 @@ function getCurrentPosition(): Promise<{coords: {latitude: number, longitude: nu
   })
 }
 
-async function findPagesNear(latitude: number, longitude: number) {
+async function findPagesNear(latitude: number, longitude: number): Promise<Location[]> {
   const url = new URL('https://en.wikipedia.org/w/api.php')
   url.search = new URLSearchParams({
     action: 'query',
@@ -45,39 +55,29 @@ async function getPageText(pageid: string) {
   return json.query.pages[pageid].extract
 }
 
-function speak(text: string) {
-  const synth = window.speechSynthesis;
-  
-  const utterThis = new SpeechSynthesisUtterance(text);
-
-  // Pick a random english speaking voice
-  const voices = synth.getVoices().filter(x => x.lang.startsWith('en-'))
-  utterThis.voice = voices[Math.floor(Math.random()*voices.length)]
-
-  synth.speak(utterThis);
-}
-
-let text: string
-
-function triggerSpeech() {
-  speak(text)
-}
-
-(async function() {
+async function generatePlace() {
   const {coords: {latitude, longitude}} = await getCurrentPosition()
   const locations = await findPagesNear(latitude, longitude)
-  if (locations.length === 0) {
-    console.log('No items')
-  }
-  for (const location of locations) {
-    text = await getPageText(location.pageid)
-    const dl = document.createElement('dl')
-    const dt = document.createElement('dt')
-    dt.textContent = location.title
-    const dd = document.createElement('dd')
-    dd.textContent = text
-    dl.append(dt, dd)
-    
-    document.body.append(dl)
-  }
-})()
+  const location = locations[0]
+
+  db.save(location)
+
+  renderLocation(location)
+}
+
+async function renderLocation(location: Location) {
+  const text = await getPageText(location.pageid)
+
+  document.querySelector('dl')?.append(...html`<dt>${location.title}</dt><dd>${text}</dd>`)
+}
+
+await ready()
+for (const location of db.get()) {
+  renderLocation(location)
+}
+
+document.querySelector('button')?.addEventListener('click', () => {
+  generatePlace()
+})
+
+export {}

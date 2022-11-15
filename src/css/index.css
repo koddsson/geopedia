@@ -1,10 +1,27 @@
 @import "open-props/src/index.css";
 @import "open-props/src/extra/normalize.css";
+@import "open-props/src/extra/buttons.css";
+
+body {
+  padding: var(--size-1) var(--size-3);
+}
+
+button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: var(--size-3);
+}
 
 dd {
   max-inline-size: unset;
 }
 
-body {
-  padding: var(--size-3);
+dd:not(:last-child)::after {
+  display: block;
+  content: '';
+  border-left: var(--border-size-2) solid var(--gray-5);
+  height: var(--size-8);
+  margin-left: var(--size-3);
+  margin-top: var(--size-4);
 }
