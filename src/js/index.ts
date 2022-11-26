@@ -1,5 +1,5 @@
-import {Database} from './db.ts'
-import {ready, html} from './utils.ts'
+import {Database} from './db'
+import {ready, html} from './utils'
 
 interface Location {
   title: string
