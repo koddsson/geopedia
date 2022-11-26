@@ -95,7 +95,7 @@ for (const {location} of entries) {
   await renderLocation(location)
 }
 
-document.querySelector('find-nearest-place')?.addEventListener('click', () => {
+document.querySelector('#find-nearest-place')?.addEventListener('click', () => {
   generatePlace()
 })
 
