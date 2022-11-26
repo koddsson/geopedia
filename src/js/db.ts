@@ -2,6 +2,8 @@ interface DatabaseEntry {
   id: string
 }
 
+type DatabaseEntryId = string
+
 export class Database<T extends DatabaseEntry> {
   constructor(public key: string) {}
 
@@ -11,8 +13,14 @@ export class Database<T extends DatabaseEntry> {
     
     localStorage.setItem(this.key, JSON.stringify(existingData))
   }
+  
+  remove(id: DatabaseEntryId) {
+    const newData = this.getAll().filter(item => item.id !== id)
 
-  get(id: string): T | undefined {
+    localStorage.setItem(this.key, JSON.stringify(newData))
+  }
+
+  get(id: DatabaseEntryId): T | undefined {
     const all = this.getAll()
     return all.find(item => item.id === id)
   }

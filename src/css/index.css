@@ -6,13 +6,24 @@ body {
   padding: var(--size-1) var(--size-3);
 }
 
-button {
+#find-nearest-place {
   position: absolute;
   bottom: 0;
   right: 0;
   margin: var(--size-3);
 }
 
+article {
+  display: flex;
+  flex-direction: column;
+}
+
+.location-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/*
 dd {
   max-inline-size: unset;
 }
@@ -25,3 +36,4 @@ dd:not(:last-child)::after {
   margin-left: var(--size-3);
   margin-top: var(--size-4);
 }
+*/

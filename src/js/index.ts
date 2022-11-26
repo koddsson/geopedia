@@ -86,7 +86,7 @@ async function generatePlace() {
 async function renderLocation(location: Location) {
   const text = await getPageText(location.pageid.toString())
 
-  document.querySelector('dl')?.prepend(...html`<dt>${location.title}</dt><dd>${text}</dd>`)
+  document.querySelector('#locations')?.prepend(...html`<article><h2>${location.title}</h2><div>${text}</div><div class="location-actions"><button data-remove-location="${location.pageid}">Remove</button><div></article>`)
 }
 
 await ready()
@@ -95,8 +95,17 @@ for (const {location} of entries) {
   await renderLocation(location)
 }
 
-document.querySelector('button')?.addEventListener('click', () => {
+document.querySelector('find-nearest-place')?.addEventListener('click', () => {
   generatePlace()
+})
+
+document.addEventListener('click', function(event) {
+  const target = event.target as HTMLElement
+  if (target.matches('button[data-remove-location]')) {
+    const id = target.getAttribute('data-remove-location')!
+    db.remove(id)
+    target.closest('article')?.remove()
+  }
 })
 
 export {}
