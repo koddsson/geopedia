@@ -3,7 +3,12 @@ import {ready, html} from './utils'
 
 interface Location {
   title: string
-  pageid: string
+  pageid: number
+  primary: string
+  ns: number
+  lat: number
+  lon: number
+  dist: number
 }
 
 const db = new Database<Location>('locations')
