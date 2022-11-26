@@ -1,12 +1,22 @@
-import {Database} from './db.ts'
-import {ready, html} from './utils.ts'
+import {Database} from './db'
+import {ready, html} from './utils'
 
 interface Location {
   title: string
-  pageid: string
+  pageid: number
+  primary: string
+  ns: number
+  lat: number
+  lon: number
+  dist: number
 }
 
-const db = new Database<Location>('locations')
+interface LocationEntry {
+  id: string
+  location: Location
+}
+
+const db = new Database<LocationEntry>('locations')
 
 function getCurrentPosition(): Promise<{coords: {latitude: number, longitude: number}}> {
   return new Promise((resolve, reject) => {
@@ -37,7 +47,13 @@ async function findPagesNear(latitude: number, longitude: number): Promise<Locat
   return json.query.geosearch
 }
 
+const pageTextCache = new Database<{id: string, extract: string}>('page-text-cache')
+
 async function getPageText(pageid: string) {
+  const cacheHit = pageTextCache.get(pageid)
+  if (cacheHit) {
+    return cacheHit.extract
+  }
   const url = new URL('https://en.wikipedia.org/w/api.php')
   url.search = new URLSearchParams({
     action: 'query',
@@ -52,7 +68,9 @@ async function getPageText(pageid: string) {
   const headers = new Headers({Accept: 'application/json'})
   const response = await fetch(url, {headers})
   const json = await response.json()
-  return json.query.pages[pageid].extract
+  const extract = json.query.pages[pageid].extract
+  pageTextCache.save({id: pageid, extract})
+  return extract
 }
 
 async function generatePlace() {
@@ -60,20 +78,21 @@ async function generatePlace() {
   const locations = await findPagesNear(latitude, longitude)
   const location = locations[0]
 
-  db.save(location)
+  db.save({id: location.pageid.toString(), location})
 
   renderLocation(location)
 }
 
 async function renderLocation(location: Location) {
-  const text = await getPageText(location.pageid)
+  const text = await getPageText(location.pageid.toString())
 
-  document.querySelector('dl')?.append(...html`<dt>${location.title}</dt><dd>${text}</dd>`)
+  document.querySelector('dl')?.prepend(...html`<dt>${location.title}</dt><dd>${text}</dd>`)
 }
 
 await ready()
-for (const location of db.get()) {
-  renderLocation(location)
+const entries = db.getAll().sort()
+for (const {location} of entries) {
+  await renderLocation(location)
 }
 
 document.querySelector('button')?.addEventListener('click', () => {
