@@ -1,4 +1,8 @@
-export class Database<T> {
+interface DatabaseEntry {
+  id: string
+}
+
+export class Database<T extends DatabaseEntry> {
   constructor(public key: string) {}
 
   save(datum: T) {
