@@ -11,7 +11,12 @@ interface Location {
   dist: number
 }
 
-const db = new Database<Location>('locations')
+interface LocationEntry {
+  id: string
+  location: Location
+}
+
+const db = new Database<LocationEntry>('locations')
 
 function getCurrentPosition(): Promise<{coords: {latitude: number, longitude: number}}> {
   return new Promise((resolve, reject) => {
@@ -65,7 +70,7 @@ async function generatePlace() {
   const locations = await findPagesNear(latitude, longitude)
   const location = locations[0]
 
-  db.save(location)
+  db.save({id: location.pageid.toString(), location})
 
   renderLocation(location)
 }
