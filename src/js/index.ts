@@ -82,8 +82,9 @@ async function renderLocation(location: Location) {
 }
 
 await ready()
-for (const location of db.get()) {
-  renderLocation(location)
+const entries = db.getAll().sort()
+for (const {location} of entries) {
+  await renderLocation(location)
 }
 
 document.querySelector('button')?.addEventListener('click', () => {
