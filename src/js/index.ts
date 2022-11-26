@@ -86,7 +86,7 @@ async function generatePlace() {
 async function renderLocation(location: Location) {
   const text = await getPageText(location.pageid.toString())
 
-  document.querySelector('dl')?.append(...html`<dt>${location.title}</dt><dd>${text}</dd>`)
+  document.querySelector('dl')?.prepend(...html`<dt>${location.title}</dt><dd>${text}</dd>`)
 }
 
 await ready()
