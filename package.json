@@ -42,6 +42,6 @@
     "postcss-import": "^15.1.0",
     "postcss-jit-props": "^1.0.7",
     "prettier": "^2.7.1",
-    "rollup-plugin-esbuild": "^4.10.1"
+    "rollup-plugin-esbuild": "^5.0.0"
   }
 }
