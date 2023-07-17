@@ -1,4 +1,4 @@
-import html from '@web/rollup-plugin-html'
+import { rollupPluginHTML as html } from '@web/rollup-plugin-html';
 import esbuild from 'rollup-plugin-esbuild'
 
 export default {
