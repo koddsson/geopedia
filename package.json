@@ -30,7 +30,7 @@
   "devDependencies": {
     "@github/prettier-config": "^0.0.6",
     "@open-wc/testing": "^4.0.0",
-    "@web/dev-server": "^0.4.3",
+    "@web/dev-server": "^0.4.4",
     "@web/dev-server-esbuild": "^1.0.2",
     "@web/rollup-plugin-html": "^2.3.0",
     "@web/test-runner": "^0.18.1",
