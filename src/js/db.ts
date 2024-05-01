@@ -1,32 +1,31 @@
 interface DatabaseEntry {
-  id: string
+  id: string;
 }
 
-type DatabaseEntryId = string
+type DatabaseEntryId = string;
 
 export class Database<T extends DatabaseEntry> {
   constructor(public key: string) {}
 
   save(datum: T) {
-    const existingData = this.getAll()
-    existingData.push(datum)
-    
-    localStorage.setItem(this.key, JSON.stringify(existingData))
-  }
-  
-  remove(id: DatabaseEntryId) {
-    const newData = this.getAll().filter(item => item.id !== id)
+    const existingData = this.getAll();
+    existingData.push(datum);
 
-    localStorage.setItem(this.key, JSON.stringify(newData))
+    localStorage.setItem(this.key, JSON.stringify(existingData));
+  }
+
+  remove(id: DatabaseEntryId) {
+    const newData = this.getAll().filter((item) => item.id !== id);
+
+    localStorage.setItem(this.key, JSON.stringify(newData));
   }
 
   get(id: DatabaseEntryId): T | undefined {
-    const all = this.getAll()
-    return all.find(item => item.id === id)
-  }
-  
-  getAll(): T[] {
-    return JSON.parse(localStorage.getItem(this.key) || '[]')
+    const all = this.getAll();
+    return all.find((item) => item.id === id);
   }
 
+  getAll(): T[] {
+    return JSON.parse(localStorage.getItem(this.key) || '[]');
+  }
 }

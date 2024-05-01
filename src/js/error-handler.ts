@@ -1,17 +1,17 @@
 function handleError(event: ErrorEvent | PromiseRejectionEvent) {
-  const searchParams = new URLSearchParams(window.location.search)
-  if (!searchParams.has('debug')) {
-    return
+  const searchParameters = new URLSearchParams(window.location.search);
+  if (!searchParameters.has('debug')) {
+    return;
   }
 
   if (event instanceof ErrorEvent) {
-    alert(event.message)
+    alert(event.message);
   } else if (event instanceof PromiseRejectionEvent) {
-    alert(event.reason)
+    alert(event.reason);
   } else {
-    alert(JSON.stringify(event, null, 4))
+    alert(JSON.stringify(event, null, 4));
   }
 }
 
-window.addEventListener("error", handleError)
-window.addEventListener('unhandledrejection', handleError)
+window.addEventListener('error', handleError);
+window.addEventListener('unhandledrejection', handleError);
