@@ -1,4 +1,4 @@
-import { Database } from './db';
+import { Database } from './database';
 import { ready, html } from './utils';
 
 interface Location {

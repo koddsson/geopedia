@@ -15,9 +15,9 @@ export class Database<T extends DatabaseEntry> {
   }
 
   remove(id: DatabaseEntryId) {
-    const newData = this.getAll().filter((item) => item.id !== id);
+    const data = this.getAll().filter((item) => item.id !== id);
 
-    localStorage.setItem(this.key, JSON.stringify(newData));
+    localStorage.setItem(this.key, JSON.stringify(data));
   }
 
   get(id: DatabaseEntryId): T | undefined {

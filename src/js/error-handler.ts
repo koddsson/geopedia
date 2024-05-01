@@ -9,7 +9,7 @@ function handleError(event: ErrorEvent | PromiseRejectionEvent) {
   } else if (event instanceof PromiseRejectionEvent) {
     alert(event.reason);
   } else {
-    alert(JSON.stringify(event, null, 4));
+    alert(JSON.stringify(event, undefined, 4));
   }
 }
 
